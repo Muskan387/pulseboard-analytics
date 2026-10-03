@@ -1,8 +1,16 @@
--- Q1: Top 10 countries by average life expectancy
+-- Q1a: Top 10 countries by average life expectancy
 SELECT country, ROUND(AVG(life_expectancy),2) AS avg_le
 FROM life_expectancy_data
 GROUP BY country
 ORDER BY avg_le DESC
+LIMIT 10;
+
+
+-- Q1b: Bottom 10 countries by average life expectancy
+SELECT country, ROUND(AVG(life_expectancy),2) AS avg_le
+FROM life_expectancy_data
+GROUP BY country
+ORDER BY avg_le ASC
 LIMIT 10;
 
 
@@ -19,7 +27,7 @@ FROM life_expectancy_data
 GROUP BY status;
 
 
--- Q4: Top 5 countries by average schooling
+-- Q4a: Top 5 countries by average schooling
 SELECT country, ROUND(AVG(schooling),2) AS avg_schooling
 FROM life_expectancy_data
 WHERE schooling > 0
@@ -27,6 +35,13 @@ GROUP BY country
 ORDER BY avg_schooling DESC
 LIMIT 5;
 
+-- Q4b: Countries with the lowest average schooling
+SELECT country, ROUND(AVG(schooling),2) AS avg_schooling
+FROM life_expectancy_data
+WHERE schooling > 0
+GROUP BY country
+ORDER BY avg_schooling ASC
+LIMIT 5;
 
 -- Q5: Schooling vs life expectancy per country
 SELECT country,
@@ -48,11 +63,19 @@ GROUP BY country
 ORDER BY avg_gdp DESC
 LIMIT 5;
 
--- Q7: Global average life expectancy for each year
-SELECT year, ROUND(AVG(life_expectancy),2) AS avg_le
-FROM life_expectancy_data
-GROUP BY year
-ORDER BY year;
+-- Q7: Year with the biggest jump in global average life expectancy
+WITH yearly AS (
+  SELECT year, AVG(life_expectancy) AS avg_le
+  FROM life_expectancy_data
+  GROUP BY year
+)
+SELECT year,
+       ROUND(avg_le, 2) AS avg_le,
+       ROUND(avg_le - LAG(avg_le) OVER (ORDER BY year), 2) AS jump
+FROM yearly
+ORDER BY jump DESC
+LIMIT 1;
+
 
 -- Q8: Country-years with immunization coverage below 50%
 SELECT country, year, hepatitis_b, polio, diphtheria, life_expectancy
