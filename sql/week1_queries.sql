@@ -66,7 +66,7 @@ FROM life_expectancy_data
 GROUP BY status, year
 ORDER BY year, status;
 
--- Q10: HIV/AIDS aur life expectancy ka relation (open-ended)
+-- Q10: Relationship between HIV/AIDS death rate and life expectancy (open-ended)
 SELECT country,
        ROUND(AVG(hiv_aids),2) AS avg_hiv,
        ROUND(AVG(life_expectancy),2) AS avg_le
