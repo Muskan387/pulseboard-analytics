@@ -61,7 +61,6 @@ WHERE hepatitis_b < 50 OR polio < 50 OR diphtheria < 50
 ORDER BY life_expectancy;
 
 -- Q9: Average life expectancy by status and year
--- (dataset mein region column nahi hai, isliye status use kiya)
 SELECT status, year, ROUND(AVG(life_expectancy),2) AS avg_le
 FROM life_expectancy_data
 GROUP BY status, year
